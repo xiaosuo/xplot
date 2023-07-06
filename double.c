@@ -33,8 +33,6 @@ to preserve same.
 #include "xplot.h"
 #include <stdio.h>
 
-extern double atof();
-
 #if defined(linux) || defined(ultrix)
 #define remainder drem
 #endif

@@ -68,8 +68,11 @@ void fatalerror(char *s)
   exit(1);
 }
 
-int get_input();
-void emit_PS();
+struct plotter;
+enum plstate;
+int get_input(FILE *fp, Display *dpy, int lineno, struct plotter *pl);
+void emit_PS(struct plotter *pl, FILE *fp, enum plstate state);
+FILE * make_name_open_file(struct plotter *pl);
 
 #define min(x,y) (((x)<(y))?(x):(y))
 #define max(x,y) (((x)>(y))?(x):(y))
@@ -1119,8 +1122,10 @@ void shrink_to_bbox(struct plotter *pl, int x, int y)
 {
   command *c;
   
+#ifdef LOTS_OF_DEBUGGING_PRINTS
   int nmapped = 0;
   int ndots = 0;
+#endif
   int virgin = 1;
   
   coord saved_x_left = pl_x_left;
@@ -1145,7 +1150,9 @@ void shrink_to_bbox(struct plotter *pl, int x, int y)
   for (c = pl->commands; c != NULL; c = c->next)
     if ( c->mapped && ! c->decoration)
       {
+#ifdef LOTS_OF_DEBUGGING_PRINTS
 	nmapped++;
+#endif
 
 	switch(c->type) {
 	case LINE:
@@ -1183,7 +1190,9 @@ void shrink_to_bbox(struct plotter *pl, int x, int y)
 	case RARROW:
 	case INVISIBLE:
 	case TEXT:
+#ifdef LOTS_OF_DEBUGGING_PRINTS
 	  ndots++;
+#endif
 	  if ( x )
 	    {
 	      if (virgin || ccmp(pl->x_type, c->xa, pl_x_left, <))
@@ -1583,7 +1592,10 @@ int main(int argc, char *argv[])
   }
     
   do {
-    int SAVx, SAVy, SAVc, SAVd;
+    int SAVx, SAVy;
+#ifdef SAVE_PRINTOUTS
+    int SAVc, SAVd;
+#endif
     lXPoint a,b;
     if (XPending(dpy) == 0
 	&& (dpy2 == 0 || XPending(dpy2) == 0)
@@ -1634,7 +1646,10 @@ int main(int argc, char *argv[])
 	  pl->new_expose = 0;
 	}
 	if (pl->visibility != VisibilityFullyObscured && pl->clean == 0) {
-	  SAVx = -100000; SAVy = -100000; SAVc = SAVd = 0;
+	  SAVx = -100000; SAVy = -100000;
+#ifdef SAVE_PRINTOUTS
+	  SAVc = SAVd = 0;
+#endif
 	  for (c = pl->commands; c != NULL; c = c->next)
 	    if (c->mapped)
 	      if (c->needs_redraw) {
@@ -1739,11 +1754,15 @@ int main(int argc, char *argv[])
 		  /* Lines are much faster on some displays */
 		  if ( SAVx == a.x && SAVy == a.y )
 		    {
+#ifdef SAVE_PRINTOUTS
 		      SAVc++;
+#endif
 		    }
 		  else
 		    {
+#ifdef SAVE_PRINTOUTS
 		      SAVd++;
+#endif
 		      SAVx = a.x; SAVy = a.y;
 #if 0
 		      /*    
@@ -2486,7 +2505,7 @@ int main(int argc, char *argv[])
       case FIGING:
       case THINFIGING:
 	{
-	  FILE *fp, *make_name_open_file();
+	  FILE *fp;
 	  if ((fp = make_name_open_file(pl))) {
 	    emit_PS(pl, fp, pl->state);
 	    (void) fclose(fp);
@@ -2750,7 +2769,6 @@ int mystrcmp(char *s1, char *s2)
 
 xpcolor_t parse_color(char *s)
 {
-  int atoi();
   int i;
 
   if (isdigit(*s))

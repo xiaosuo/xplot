@@ -48,7 +48,6 @@ char *signed_unparse(coord c)
 coord signed_parse(char *s)
 {
   coord r;
-  extern int atoi();
 
   r.i = atoi(s);
   return r;

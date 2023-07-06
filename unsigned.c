@@ -53,8 +53,6 @@ to preserve same.
 char *unsigned_unparse(coord c)
 {
 
-  extern void panic();
-
   char *r;
   char buf[50];
   (void) sprintf(buf,"%u",c.u);
@@ -69,8 +67,6 @@ coord unsigned_parse(char *s)
 {
   coord r;
 #ifndef LIBC_ATOI_IS_BROKEN
-  extern int atoi();
-
   r.u = atoi(s);
 #else
   char *p;

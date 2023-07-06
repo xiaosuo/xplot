@@ -89,7 +89,6 @@ char *timeval_unparse(coord c)
 coord timeval_parse(char *s)
 {
   coord r;
-  extern int atoi();
 
   r.t.tv_usec = 0;
 
@@ -165,11 +164,11 @@ coord timeval_subtract(coord c1,coord c2)
 coord timeval_round_down(coord c1, coord c2)
 {
   coord r;
+#ifdef HAVE_TM_GMTOFF
   struct tm *tmp;
 
   tmp = localtime((time_t *) &(c1.t.tv_sec));
 
-#ifdef HAVE_TM_GMTOFF
   c1.t.tv_sec += tmp->tm_gmtoff;
 #endif
   
@@ -193,11 +192,11 @@ coord timeval_round_down(coord c1, coord c2)
 coord timeval_round_up(coord c1, coord c2)
 {
   coord r;
+#ifdef HAVE_TM_GMTOFF
   struct tm *tmp;
 
   tmp = localtime((time_t *) &(c1.t.tv_sec));
 
-#ifdef HAVE_TM_GMTOFF
   c1.t.tv_sec += tmp->tm_gmtoff;
 #endif
   
