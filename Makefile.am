@@ -1,6 +1,5 @@
-
 #
-# Makefile for xplot
+# Makefile.am for xplot
 #
 # This software is being provided to you, the LICENSEE, by the
 # Massachusetts Institute of Technology (M.I.T.) under the following
@@ -32,52 +31,30 @@
 # the software.  Title to copyright in this software and any associated
 # documentation shall at all times remain with M.I.T., and USER agrees
 # to preserve same.
-# 
+#
 
-DEFINES= 
+bin_PROGRAMS = xplot tcpdump2xplot
 
-CC= @CC@
-CFLAGS=@CFLAGS@ ${DEFINES}
-LIBS= @LIBS@
+xplot_SOURCES = xplot.c \
+		coord.c \
+		unsigned.c \
+		signed.c \
+		timeval.c \
+		double.c \
+		dtime.c
 
-INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
-INSTALL_DATA = @INSTALL_DATA@
-INSTALL_MAN = @INSTALL_DATA@
+tcpdump2xplot_SOURCES = tcpdump2xplot.pl
 
-prefix = @prefix@
+noinst_HEADERS = coord.h \
+		 xplot.h
 
-exec_prefix = @exec_prefix@
+EXTRA_DIST = tcpdump2xplot.pl \
+	     ANNOUNCE \
+	     README \
+	     README.tcp_plots
 
-bindir = $(exec_prefix)/bin
-mandir = $(exec_prefix)/man/man1
+dist_man1_MANS = xplot.1 \
+	     tcpdump2xplot.1
 
-CFILES= xplot.c version_string.c coord.c unsigned.c signed.c timeval.c double.c dtime.c
-OFILES= xplot.o version_string.o coord.o unsigned.o signed.o timeval.o double.o dtime.o
-
-PROG= xplot
-
-MANFILES= xplot.1 tcpdump2xplot.1
-
-all:	${PROG}
-
-${PROG}: ${OFILES}
-	${CC} ${CFLAGS} -o $@.new ${OFILES} ${LIBS}
-	-mv -f $@ $@.old
-	mv -f $@.new $@
-
-version_string.c: version
-	echo 'char *version_string = "'`cat version`'";' >version_string.c
-
-install: all
-	mkdir -p $(bindir)
-	$(INSTALL_PROGRAM) xplot $(bindir)/xplot
-	$(INSTALL) tcpdump2xplot.pl $(bindir)/tcpdump2xplot
-	mkdir -p $(mandir)
-	$(INSTALL_MAN) $(MANFILES) $(mandir)
-clean:
-	rm -f ${PROG} ${PROG}.old *.o version_string.c
-
-# (note: "mkdep" below denotes the BSD 4.3+tahoe /usr/bin/mkdep )
-depend:
-	mkdep ${INCLUDES} ${CFILES}
+tcpdump2xplot: tcpdump2xplot.pl
+	cp -f $(srcdir)/tcpdump2xplot.pl tcpdump2xplot

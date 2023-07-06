@@ -1325,8 +1325,7 @@ int main(int argc, char *argv[])
   for (i = 1; i < argc && *argv[i] == '-'; i++) {
     if (strcmp ("-v", argv[i]) == 0
 	|| strcmp ("-version", argv[i]) == 0) {
-      extern char* version_string;
-      printf("xplot version %s\n", version_string);
+      printf("xplot version %s\n", VERSION);
 #if 0
       printf("sizeof command is %d\n", sizeof(command));
       printf("sizeof plotter is %d\n", sizeof(struct plotter));
