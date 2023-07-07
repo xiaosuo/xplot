@@ -55,7 +55,7 @@ char *unsigned_unparse(coord c)
 
   char *r;
   char buf[50];
-  (void) sprintf(buf,"%u",c.u);
+  (void) sprintf(buf,"%llu",c.u);
   r = malloc((unsigned) strlen(buf)+1);
   if (r == 0)
     fatalerror("malloc returned 0");
@@ -67,7 +67,7 @@ coord unsigned_parse(char *s)
 {
   coord r;
 #ifndef LIBC_ATOI_IS_BROKEN
-  r.u = atoi(s);
+  r.u = strtoull(s, NULL, 10);
 #else
   char *p;
   r.u = 0;

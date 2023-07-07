@@ -37,7 +37,7 @@ char *signed_unparse(coord c)
 {
   char *r;
   char buf[50];
-  (void) sprintf(buf,"%d",c.i);
+  (void) sprintf(buf,"%lld",c.i);
   r = malloc((unsigned) strlen(buf)+1);
   if (r == 0)
     fatalerror("malloc returned 0");
@@ -49,7 +49,7 @@ coord signed_parse(char *s)
 {
   coord r;
 
-  r.i = atoi(s);
+  r.i = strtoll(s, NULL, 10);
   return r;
 }
 

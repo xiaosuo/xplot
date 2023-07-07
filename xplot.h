@@ -55,8 +55,8 @@ double rint();     /* YMUL! some versions of ultrix omit this from math.h! */
 
 /* Coordinate type definitions */
 typedef union coord_u {
-  int i;
-  unsigned int u;
+  long long i;
+  unsigned long long u;
   struct timeval t;
   double d;
 } coord;
