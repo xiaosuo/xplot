@@ -56,5 +56,5 @@ EXTRA_DIST = tcpdump2xplot.pl \
 dist_man1_MANS = xplot.1 \
 	     tcpdump2xplot.1
 
-tcpdump2xplot: tcpdump2xplot.pl
+tcpdump2xplot$(EXEEXT): tcpdump2xplot.pl
 	cp -f $(srcdir)/tcpdump2xplot.pl tcpdump2xplot

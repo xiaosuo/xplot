@@ -1,11 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(xplot.c)
-AC_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(xplot, 0.90.7.1)
+AC_INIT([xplot], [0.90.7.1])
+AC_CONFIG_SRCDIR([xplot.c])
+AC_CONFIG_HEADERS([config.h])
+AM_INIT_AUTOMAKE
 
 dnl Checks for programs.
 AC_PROG_CC
-if test $ac_cv_prog_gcc = yes; then
+if test $ac_cv_c_compiler_gnu = yes; then
   CFLAGS="$CFLAGS -Wall"
 fi
 
@@ -25,12 +26,11 @@ AC_CHECK_LIB(m, main)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
-AC_HEADER_STDC
-AC_HEADER_TIME
 
 AC_STRUCT_TM
 
 dnl Checks for library functions.
 
-AC_OUTPUT(Makefile)
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
 

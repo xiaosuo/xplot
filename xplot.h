@@ -42,11 +42,7 @@ to preserve same.
 #error xplot requires X11
 #endif
 
-#ifdef STDC_HEADERS
 #include <stdlib.h>
-#else
-#include <malloc.h>
-#endif
 
 #ifdef HAVE_LIBM
 #include <math.h>
